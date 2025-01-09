@@ -2,15 +2,15 @@ package com.example.service;
 
 import com.example.entity.Employee;
 import com.example.repository.EmployeeRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class EmployeeService {
-    @PersistenceContext
-    private EntityManager entityManager;
+
     private final EmployeeRepository employeeRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository) {
@@ -18,12 +18,10 @@ public class EmployeeService {
     }
 
     @Transactional
-    public void demonstrateFirstLevelCache(Long empId)
+    public Employee getEmployeeById(Long id)
     {
-        Employee employee=entityManager.find(Employee.class,empId);
-        System.out.println("First Fetch:"+employee.getName());
-
-        Employee employee1=entityManager.find(Employee.class,empId);
-        System.out.println("Second fetch:"+employee1.getName());
+        System.out.println("Fetching from Database:");
+        Optional<Employee> employee=employeeRepository.findById(id);
+        return employee.orElse(null);
     }
 }
